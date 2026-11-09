@@ -1,0 +1,14 @@
+{
+  "name": "Тайны темперамента",
+  "short_name": "Темперамент",
+  "description": "Тест и исследование связи темперамента и увлечений",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fbfaf8",
+  "theme_color": "#fbfaf8",
+  "lang": "ru",
+  "icons": [
+    { "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
