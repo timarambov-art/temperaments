@@ -73,6 +73,62 @@
     }).join("");
   }
 
+  function renderCases() {
+    const rulesHost = $("#rulesList");
+    if (rulesHost && window.RULES) {
+      rulesHost.innerHTML = RULES.map(
+        (r, i) => `
+      <article class="rule">
+        <span class="rule-n" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+        <div>
+          <h3>${esc(r.t)}</h3>
+          <p>${esc(r.d)}</p>
+        </div>
+      </article>`
+      ).join("");
+    }
+
+    const host = $("#casesList");
+    if (!host || !window.CASES) return;
+    host.innerHTML = CASES.map(
+      (c, i) => `
+      <details class="case">
+        <summary>
+          <span class="case-n" aria-hidden="true">${i + 1}</span>
+          <span class="case-head"><b>${esc(c.title)}</b><small>${esc(c.lead)}</small></span>
+          <span class="arrow" aria-hidden="true">›</span>
+        </summary>
+        <div class="case-body">
+          <p class="case-ml">Что происходит</p>
+          <p class="case-mech">${esc(c.mech)}</p>
+          <div class="case-cols">
+            <div class="case-col">
+              <h4>Если ты подросток</h4>
+              <ul>${c.teen.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+            </div>
+            <div class="case-col">
+              <h4>Если ты взрослый</h4>
+              <ul>${c.adult.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+            </div>
+          </div>
+          <p class="case-red"><b>Красная линия.</b> ${esc(c.red)}</p>
+        </div>
+      </details>`
+    ).join("");
+
+    /* открыт только один кейс — на телефоне так спокойнее */
+    host.addEventListener(
+      "toggle",
+      (e) => {
+        if (!e.target.open) return;
+        [...host.querySelectorAll("details")].forEach((d) => {
+          if (d !== e.target) d.open = false;
+        });
+      },
+      true
+    );
+  }
+
   /* ---------------- исследование ---------------- */
 
   const SEG_ORDER = ["sanguine", "choleric", "phlegmatic", "melancholic"];
@@ -544,7 +600,7 @@
         },
         { rootMargin: "-8% 0px -8% 0px" }
       );
-      $$(".section-head, .story-card, .thesis, .type-card, .mini, .key, .rec-card, .limit, .about-card").forEach(
+      $$(".section-head, .story-card, .thesis, .type-card, .mini, .key, .rec-card, .rule, .case, .limit, .about-card").forEach(
         (el) => {
           el.classList.add("reveal");
           io.observe(el);
@@ -556,6 +612,7 @@
   function init() {
     renderTypes();
     renderRecs();
+    renderCases();
     renderTypesChart();
     renderHobbyBars();
     renderHeat();
